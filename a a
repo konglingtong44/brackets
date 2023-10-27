@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# 期待されるディレクトリのプレフィックス
+expected_prefix="/a/b"
+
+# 引数をチェック
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 <directory>"
+  exit 1
+fi
+
+directory=$1
+
+# 引数が期待されるプレフィックスで始まるかチェック
+if [[ ! $directory == $expected_prefix* ]]; then
+  echo "Error: The directory to be deleted is not under $expected_prefix."
+  exit 1
+fi
+
+# ディレクトリが存在するかチェック
+if [ ! -e "$directory" ]; then
+  echo "Error: The directory $directory does not exist."
+  exit 1
+fi
+
+# 引数がディレクトリであるかチェック
+if [ ! -d "$directory" ]; then
+  echo "Error: The path $directory is not a directory."
+  exit 1
+fi
+
+# ディレクトリ内のすべてのコンテンツを削除しますが、ディレクトリ自体は保持します
+find "$directory" -mindepth 1 -delete
+
+echo "All contents in $directory have been deleted, but the directory itself has been preserved."
